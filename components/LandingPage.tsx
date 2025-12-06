@@ -94,12 +94,12 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Navbar merged with hero */}
-      <nav className="relative z-10 w-full py-3 lg:py-4 px-4 sm:px-6 md:px-8 lg:px-16">
+      <nav className="relative z-10 w-full py-3 lg:py-4 px-4 sm:px-6 md:px-8 lg:px-16 overflow-x-hidden">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
-          <div className="relative w-36 lg:w-40 h-10 lg:h-12">
+          <div className="relative w-28 sm:w-36 lg:w-40 h-10 lg:h-12 min-w-0">
             <Image
               src="/premiumlogo.png"
               alt="Zyntiq Logo"
@@ -138,17 +138,17 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="px-4 min-h-screen flex items-center pt-16 sm:pt-20 md:pt-8 lg:pt-0" style={{ marginTop: '-40px' }}>
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <section className="px-4 overflow-x-hidden min-h-screen flex items-center pt-16 sm:pt-20 md:pt-8 -mt-10 lg:mt-0">
+        <div className="max-w-7xl mx-auto w-full overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center overflow-hidden min-w-0">
             {/* Left Side - Content */}
             <motion.div
-              className="space-y-8"
+              className="space-y-8 min-w-0"
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
             >
-              <motion.div className="space-y-6" variants={fadeInUp}>
+              <motion.div className="space-y-6 break-words" variants={fadeInUp}>
                 <motion.h1
                   className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
                   variants={fadeInUp}
@@ -160,7 +160,7 @@ export default function LandingPage() {
                 </motion.h1>
 
                 <motion.p
-                  className="text-xl text-slate-300 leading-relaxed max-w-xl"
+                  className="text-xl text-slate-300 leading-relaxed max-w-xl break-words"
                   variants={fadeInUp}
                 >
                   Join our comprehensive internship and career development programs.
@@ -187,7 +187,7 @@ export default function LandingPage() {
 
             {/* Right Side - Image */}
             <motion.div
-              className="relative h-[300px] sm:h-[440px] lg:h-[800px] flex items-center justify-center"
+              className="relative w-full h-[300px] sm:h-[440px] lg:h-[800px] flex items-center justify-center min-w-0"
               initial="hidden"
               animate="visible"
               variants={fadeInRight}
@@ -208,16 +208,16 @@ export default function LandingPage() {
       {/* About Section */}
       <motion.section
         id="about"
-        className="py-20 px-4 bg-slate-800/30"
+        className="py-20 px-4 bg-slate-800/30 overflow-x-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
         variants={fadeInUp}
       >
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-w-0">
             <motion.div
-              className="space-y-6"
+              className="space-y-6 min-w-0"
               variants={staggerContainer}
             >
 
@@ -293,7 +293,7 @@ export default function LandingPage() {
             </motion.div>
 
             <motion.div
-              className="grid grid-cols-2 gap-6"
+              className="grid grid-cols-2 gap-6 min-w-0"
               variants={staggerContainer}
             >
               <motion.div
@@ -332,7 +332,7 @@ export default function LandingPage() {
       {/* Available Positions */}
       <motion.section
         id="programs"
-        className="py-20 px-4"
+        className="py-20 px-4 overflow-x-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -340,7 +340,7 @@ export default function LandingPage() {
       >
         <div className="max-w-7xl mx-auto">
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-16 break-words"
             variants={fadeInUp}
           >
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -357,7 +357,7 @@ export default function LandingPage() {
             </div>
           ) : (
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-w-0"
               variants={staggerContainer}
             >
               {roles.map((role, index) => (
@@ -416,7 +416,7 @@ export default function LandingPage() {
       {/* Program Durations */}
       <motion.section
         id="durations"
-        className="py-20 px-4 bg-slate-800/30"
+        className="py-20 px-4 bg-slate-800/30 overflow-x-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
@@ -425,7 +425,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Side - Content */}
-            <motion.div variants={staggerContainer}>
+            <motion.div className="min-w-0" variants={staggerContainer}>
               <motion.h3
                 className="text-3xl md:text-4xl font-bold text-white mb-4"
                 variants={fadeInLeft}
@@ -484,7 +484,7 @@ export default function LandingPage() {
 
             {/* Right Side - Image */}
             <motion.div
-              className="relative h-[300px] sm:h-[400px] flex items-center justify-center"
+              className="relative w-full h-[300px] sm:h-[400px] flex items-center justify-center min-w-0"
               variants={fadeInRight}
             >
               <Image
