@@ -1,0 +1,36 @@
+2025-12-09T08:37:29.103Z - Error: error:1E08010C:DECODER routines::unsupported
+Stack: Error: error:1E08010C:DECODER routines::unsupported
+    at Sign.sign (node:internal/crypto/sig:128:29)
+    at Object.sign (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\jwa\index.js:166:45)
+    at Object.jwsSign [as sign] (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\jws\lib\sign-stream.js:32:24)
+    at GoogleToken.<anonymous> (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:407:27)
+    at Generator.<anonymous> (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:36:1660)
+    at Generator.next (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:37:362)
+    at asyncGeneratorStep (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:38:70)
+    at _next (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:39:163)
+    at C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:39:299
+    at new Promise (<anonymous>)
+    at GoogleToken.<anonymous> (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:39:90)
+    at GoogleToken._requestToken2 (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:449:25)
+    at GoogleToken._requestToken (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:389:25)
+    at GoogleToken.<anonymous> (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:315:92)
+    at Generator.<anonymous> (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:36:1660)
+
+2025-12-09T08:52:23.435Z - Error: error:1E08010C:DECODER routines::unsupported
+Stack: Error: error:1E08010C:DECODER routines::unsupported
+    at Sign.sign (node:internal/crypto/sig:128:29)
+    at Object.sign (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\jwa\index.js:166:45)
+    at Object.jwsSign [as sign] (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\jws\lib\sign-stream.js:32:24)
+    at GoogleToken.<anonymous> (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:407:27)
+    at Generator.<anonymous> (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:36:1660)
+    at Generator.next (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:37:362)
+    at asyncGeneratorStep (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:38:70)
+    at _next (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:39:163)
+    at C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:39:299
+    at new Promise (<anonymous>)
+    at GoogleToken.<anonymous> (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:39:90)
+    at GoogleToken._requestToken (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:389:25)
+    at GoogleToken.<anonymous> (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:315:92)
+    at Generator.<anonymous> (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:36:1660)
+    at Generator.next (C:\Users\sraja\Music\Zyn-Offer-main\node_modules\gtoken\build\cjs\src\index.cjs:37:362)
+
