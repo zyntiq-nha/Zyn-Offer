@@ -177,7 +177,7 @@ export default function LandingPage() {
                   onClick={() => router.push('/apply')}
                   className="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#93cfe2] to-[#93cfe2] hover:from-[#7ec5db] hover:to-[#7ec5db] text-slate-900 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-[rgba(147,207,226,0.25)] flex items-center justify-center"
                 >
-                  <span>Register Now</span>
+                  <span>Offer Letter</span>
                   <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
