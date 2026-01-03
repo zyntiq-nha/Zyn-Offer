@@ -59,10 +59,21 @@ export default function ApplicationForm({ roles, tenures, onClose, inline }: App
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    setFormData(prev => {
+      const next = {
+        ...prev,
+        [name]: value
+      }
+
+      if (name === 'role_id') {
+        return {
+          ...next,
+          tenure_id: ''
+        }
+      }
+
+      return next
+    })
 
     // Update available tenures when role changes
     if (name === 'role_id') {
@@ -71,12 +82,6 @@ export default function ApplicationForm({ roles, tenures, onClose, inline }: App
         const availableMonths = getAvailableTenuresForRole(selectedRole.code)
         const filteredTenures = tenures.filter(tenure => availableMonths.includes(tenure.months))
         setAvailableTenures(filteredTenures)
-
-        // Reset tenure selection
-        setFormData(prev => ({
-          ...prev,
-          tenure_id: ''
-        }))
       } else {
         setAvailableTenures([])
       }
@@ -149,27 +154,37 @@ export default function ApplicationForm({ roles, tenures, onClose, inline }: App
 
       const fileUrls: { [key: string]: string | null } = {}
 
-      // Upload each file
-      for (const upload of fileUploads) {
-        if (upload.file) {
-          setUploadProgress(prev => ({ ...prev, [upload.key]: true }))
+      setUploadProgress(prev => ({
+        ...prev,
+        ...Object.fromEntries(fileUploads.map(u => [u.key, !!u.file]))
+      }))
 
-          const result = await ServerFileUpload.uploadFile(
-            upload.file,
-            upload.folder,
-            tempUserId
-          )
-
-          if (result.error) {
-            throw new Error(`Failed to upload ${upload.folder}: ${result.error}`)
+      await Promise.all(
+        fileUploads.map(async (upload) => {
+          if (!upload.file) {
+            fileUrls[upload.key] = null
+            return
           }
 
-          fileUrls[upload.key] = result.url
-          setUploadProgress(prev => ({ ...prev, [upload.key]: false }))
-        } else {
-          fileUrls[upload.key] = null
-        }
-      }
+          try {
+            const result = await ServerFileUpload.uploadFile(
+              upload.file,
+              upload.folder,
+              tempUserId
+            )
+
+            if (result.error) {
+              throw new Error(result.error)
+            }
+
+            fileUrls[upload.key] = result.url
+          } catch (e: any) {
+            throw new Error(`Failed to upload ${upload.folder}: ${e?.message || 'Upload failed'}`)
+          } finally {
+            setUploadProgress(prev => ({ ...prev, [upload.key]: false }))
+          }
+        })
+      )
 
       // Prepare data for database
       const submitData = {

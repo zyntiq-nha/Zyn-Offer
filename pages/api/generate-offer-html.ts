@@ -88,7 +88,7 @@ export default async function handler(
 
         // Replace placeholders
         htmlContent = htmlContent
-            .replace(/{{Name}}/g, candidateName)
+            .replace(/{{Name}}/g, finalCandidateName)
             .replace(/{{Date}}/g, currentDate)
             .replace(/{{LOGO_IMAGE}}/g, logoBase64)
             .replace(/{{BACKGROUND_IMAGE}}/g, bgBase64)
@@ -100,7 +100,7 @@ export default async function handler(
         // Configure for serverless (Vercel) vs Local
         const isLocal = process.env.NODE_ENV === 'development'
 
-        let browser;
+        let browser: any
         if (isLocal) {
             // Local development: Use local Chrome/Chromium
             // You might need to adjust the executablePath for your local machine if not found automatically
@@ -122,35 +122,60 @@ export default async function handler(
             } as any)
         }
 
-        const page = await browser.newPage()
+        try {
+            const page = await browser.newPage()
+            page.setDefaultTimeout(30_000)
 
-        console.log('Setting HTML content...')
-        await page.setContent(htmlContent, {
-            waitUntil: 'networkidle0'
-        })
+            await page.setRequestInterception(true)
+            page.on('request', (request: any) => {
+                const url = request.url()
+                const resourceType = request.resourceType?.() || ''
 
-        console.log('Generating PDF...')
-        const pdfBuffer = await page.pdf({
-            format: 'A4',
-            printBackground: true,
-            margin: {
-                top: '0',
-                right: '0',
-                bottom: '0',
-                left: '0'
+                // Templates include Google Fonts (@import). External requests can be slow or hang.
+                if (
+                    url.startsWith('http') &&
+                    (resourceType === 'stylesheet' || resourceType === 'font') &&
+                    (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com'))
+                ) {
+                    request.abort()
+                    return
+                }
+
+                request.continue()
+            })
+
+            console.log('Setting HTML content...')
+            await page.setContent(htmlContent, {
+                waitUntil: 'domcontentloaded',
+                timeout: 30_000,
+            })
+
+            console.log('Generating PDF...')
+            const pdfBuffer = await page.pdf({
+                format: 'A4',
+                printBackground: true,
+                margin: {
+                    top: '0',
+                    right: '0',
+                    bottom: '0',
+                    left: '0'
+                }
+            })
+
+            console.log(`PDF generated successfully. Size: ${pdfBuffer.length} bytes`)
+
+            // Send PDF
+            const filename = `Offer_Letter_${finalCandidateName.replace(/\s+/g, '_')}.pdf`
+            res.setHeader('Content-Type', 'application/pdf')
+            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
+            res.setHeader('Content-Length', pdfBuffer.length)
+            res.end(pdfBuffer)
+            console.log('PDF sent to client')
+        } finally {
+            if (browser) {
+                await browser.close()
             }
-        })
-
-        await browser.close()
-        console.log(`PDF generated successfully. Size: ${pdfBuffer.length} bytes`)
-
-        // Send PDF
-        const filename = `Offer_Letter_${candidateName.replace(/\s+/g, '_')}.pdf`
-        res.setHeader('Content-Type', 'application/pdf')
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`)
-        res.setHeader('Content-Length', pdfBuffer.length)
-        res.end(pdfBuffer)
-        console.log('PDF sent to client')
+        }
 
     } catch (error: any) {
         console.error('Error generating PDF:', error)

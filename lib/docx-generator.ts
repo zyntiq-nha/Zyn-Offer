@@ -1,6 +1,39 @@
 import { saveAs } from 'file-saver'
 import { getTemplateCode } from './role-tenure-mapping'
 
+async function readErrorMessage(response: Response): Promise<string> {
+  try {
+    const contentType = response.headers.get('content-type') || ''
+    if (contentType.includes('application/json')) {
+      const errorData: any = await response.json()
+      return errorData?.error || errorData?.message || JSON.stringify(errorData)
+    }
+
+    const text = await response.text()
+    return text || `Request failed with status ${response.status}`
+  } catch {
+    return `Request failed with status ${response.status}`
+  }
+}
+
+async function fetchWithTimeout(
+  input: RequestInfo | URL,
+  init: RequestInit,
+  timeoutMs: number
+): Promise<Response> {
+  const controller = new AbortController()
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs)
+
+  try {
+    return await fetch(input, {
+      ...init,
+      signal: controller.signal,
+    })
+  } finally {
+    window.clearTimeout(timeoutId)
+  }
+}
+
 export interface OfferLetterData {
   candidateName: string
   roleCode: string
@@ -23,7 +56,7 @@ export async function generateOfferLetter(data: OfferLetterData): Promise<void> 
     })
 
     // Call API endpoint to generate offer letter (HTML based)
-    const response = await fetch('/api/generate-offer-html', {
+    const response = await fetchWithTimeout('/api/generate-offer-html', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,11 +69,11 @@ export async function generateOfferLetter(data: OfferLetterData): Promise<void> 
         templateCode: templateCode,
         userId: data.userId
       })
-    })
+    }, 60_000)
 
     if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData.error || 'Failed to generate offer letter')
+      const message = await readErrorMessage(response)
+      throw new Error(message || 'Failed to generate offer letter')
     }
 
     // Get the blob from response

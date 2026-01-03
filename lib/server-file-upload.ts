@@ -1,5 +1,38 @@
 import imageCompression from 'browser-image-compression'
 
+async function readErrorMessage(response: Response): Promise<string> {
+    try {
+        const contentType = response.headers.get('content-type') || ''
+        if (contentType.includes('application/json')) {
+            const errorData: any = await response.json()
+            return errorData?.error || errorData?.message || JSON.stringify(errorData)
+        }
+
+        const text = await response.text()
+        return text || `Request failed with status ${response.status}`
+    } catch {
+        return `Request failed with status ${response.status}`
+    }
+}
+
+async function fetchWithTimeout(
+    input: RequestInfo | URL,
+    init: RequestInit,
+    timeoutMs: number
+): Promise<Response> {
+    const controller = new AbortController()
+    const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs)
+
+    try {
+        return await fetch(input, {
+            ...init,
+            signal: controller.signal,
+        })
+    } finally {
+        window.clearTimeout(timeoutId)
+    }
+}
+
 // Server-side file upload helper with client-side compression
 export class ServerFileUpload {
     // Aggressive compression settings for maximum free tier capacity
@@ -39,7 +72,7 @@ export class ServerFileUpload {
             const base64 = await this.fileToBase64(fileToUpload)
 
             // Send to server API
-            const response = await fetch('/api/upload-file', {
+            const response = await fetchWithTimeout('/api/upload-file', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,11 +84,11 @@ export class ServerFileUpload {
                     folder,
                     userId
                 })
-            })
+            }, 60_000)
 
             if (!response.ok) {
-                const error = await response.json()
-                throw new Error(error.error || 'Upload failed')
+                const message = await readErrorMessage(response)
+                throw new Error(message || 'Upload failed')
             }
 
             const result = await response.json()
